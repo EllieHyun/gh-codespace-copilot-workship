@@ -1,0 +1,40 @@
+name: Name of your workflow
+
+# add a push event that triggers this workflow
+on: 
+  push:
+    branches: [ main ]
+
+jobs:
+  build-test: # The name of the job
+    runs-on: ubuntu-latest # The runner operating system
+
+    steps:
+      # add a new step to checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # add a new step to install dotnet .NET SDK 7
+      - name: Install .NET SDK 7
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 7.x
+
+      # add a new step to restore nuget packages
+      - name: Restore NuGet packages
+        run: dotnet restore
+
+      # add a new step to build the entire solution with Release configuration
+      - name: Build solution
+        run: dotnet build --configuration Release
+
+      # add a new step to test the solution with Release configuration
+      - name: Test solution
+        run: dotnet test --configuration Release
+
+      # add a new step to publish src/WebApi with Release configuration
+      - name: Publish WebApi
+        run: dotnet publish src/WebApi --configuration Release --output ./publish
+      
+
+    
